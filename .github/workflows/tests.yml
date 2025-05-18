@@ -32,13 +32,5 @@ jobs:
     - name: Run Tests
       run: npm run test:ci
 
-    - name: Upload Coverage Report
-      uses: actions/upload-artifact@v3
-      if: success()
-      with:
-        name: code-coverage
-        path: coverage
-        retention-days: 30
-
     - name: Build
       run: npm run build --if-present
