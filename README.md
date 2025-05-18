@@ -30,7 +30,7 @@ A modern web application for managing insurance claims, built with Angular 17 an
 
 1. Clone the repository:
 ```bash
-git clone [repository-url]
+git clone https://github.com/JorgeFi18/claim-confidence-frontend.git
 cd claim-confidence-frontend
 ```
 
