@@ -8,6 +8,7 @@ module.exports = function (config) {
       require('karma-chrome-launcher'),
       require('karma-jasmine-html-reporter'),
       require('karma-coverage'),
+      require('karma-junit-reporter'),
       require('@angular-devkit/build-angular/plugins/karma')
     ],
     client: {
@@ -24,10 +25,18 @@ module.exports = function (config) {
       subdir: '.',
       reporters: [
         { type: 'html' },
-        { type: 'text-summary' }
-      ]
+        { type: 'text-summary' },
+        { type: 'lcov' }
+      ],
+      fixWebpackSourcePaths: true
     },
-    reporters: ['progress', 'kjhtml'],
+    junitReporter: {
+      outputDir: './test-results',
+      outputFile: 'junit-report.xml',
+      useBrowserName: false,
+      suite: 'claim-confidence'
+    },
+    reporters: ['progress', 'kjhtml', 'coverage', 'junit'],
     browsers: ['Chrome'],
     restartOnFileChange: true,
     customLaunchers: {

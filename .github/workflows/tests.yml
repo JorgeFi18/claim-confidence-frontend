@@ -30,7 +30,51 @@ jobs:
         sudo apt-get install -y google-chrome-stable
 
     - name: Run Tests
-      run: npm test -- --browsers=ChromeHeadless --no-watch
+      run: npm run test:ci
+
+    - name: Upload Coverage Report
+      uses: actions/upload-artifact@v3
+      if: success()
+      with:
+        name: code-coverage
+        path: coverage
+        retention-days: 30
 
     - name: Build
-      run: npm run build --if-present 
+      run: npm run build --if-present
+
+  deploy-coverage:
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    
+    steps:
+    - name: Download Coverage Report
+      uses: actions/download-artifact@v3
+      with:
+        name: code-coverage
+        path: coverage-report
+
+    - name: Create coverage redirect
+      run: |
+        if [ -d "coverage-report/html" ]; then
+          echo "<!DOCTYPE html><html><head><meta http-equiv='refresh' content='0; url=html/index.html'></head><body>Redirecting to coverage report...</body></html>" > coverage-report/index.html
+        else
+          echo "<!DOCTYPE html><html><head><title>Coverage Report</title></head><body><h1>Coverage Report for Claim Confidence Frontend</h1><p>Last updated: $(date)</p><p><a href='lcov-report/index.html'>View detailed coverage report</a></p></body></html>" > coverage-report/index.html
+        fi
+
+    - name: Setup Pages
+      uses: actions/configure-pages@v3
+      
+    - name: Upload Pages Artifact
+      uses: actions/upload-pages-artifact@v2
+      with:
+        path: 'coverage-report'
+        
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v2
