@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-auth-layout',
   standalone: true,
   imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  templateUrl: './auth-layout.component.html',
+  styleUrl: './auth-layout.component.css'
 })
-export class AppComponent {
-  title = 'Claims Confidence';
+export class AuthLayoutComponent {
+
 }

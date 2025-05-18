@@ -1,0 +1,221 @@
+<div class="p-6">
+  <div class="sm:flex sm:items-center sm:justify-between">
+    <div>
+      <h1 class="text-2xl font-semibold text-gray-900">Claim Details</h1>
+      <p class="mt-2 text-sm text-gray-700">View and manage claim information</p>
+    </div>
+    <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+      <a
+        routerLink="/claims"
+        class="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:w-auto cursor-pointer"
+      >
+        Back to Claims
+      </a>
+    </div>
+  </div>
+
+  @if (isLoading) {
+    <div class="mt-8 flex justify-center">
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+    </div>
+  } @else if (error) {
+    <div class="mt-8 rounded-md bg-red-50 p-4">
+      <div class="flex">
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-red-800">{{ error }}</h3>
+        </div>
+      </div>
+    </div>
+  } @else if (claim) {
+    <div class="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
+      <!-- Claim Information -->
+      <div class="lg:col-span-2 space-y-6">
+        <div class="bg-white shadow sm:rounded-lg">
+          <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg font-medium leading-6 text-gray-900">Claim Information</h3>
+            <div class="mt-5 border-t border-gray-200">
+              <dl class="divide-y divide-gray-200">
+                <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4">
+                  <dt class="text-sm font-medium text-gray-500">Benefit</dt>
+                  <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{{ claim.benefit }}</dd>
+                </div>
+                <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4">
+                  <dt class="text-sm font-medium text-gray-500">Full Name</dt>
+                  <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{{ claim.fullName }}</dd>
+                </div>
+                <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4">
+                  <dt class="text-sm font-medium text-gray-500">Birth Date</dt>
+                  <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{{ claim.birthDate | date }}</dd>
+                </div>
+                <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4">
+                  <dt class="text-sm font-medium text-gray-500">Gender</dt>
+                  <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{{ claim.gender }}</dd>
+                </div>
+                <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4">
+                  <dt class="text-sm font-medium text-gray-500">Phone Number</dt>
+                  <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{{ claim.phoneNumber }}</dd>
+                </div>
+                <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4">
+                  <dt class="text-sm font-medium text-gray-500">Work Phone</dt>
+                  <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{{ claim.workPhoneNumber }}</dd>
+                </div>
+                <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4">
+                  <dt class="text-sm font-medium text-gray-500">Dependants</dt>
+                  <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{{ claim.dependants ? 'Yes' : 'No' }}</dd>
+                </div>
+                <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4">
+                  <dt class="text-sm font-medium text-gray-500">Role Start Date</dt>
+                  <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{{ claim.roleStartDate | date }}</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comments Section -->
+        <div class="bg-white shadow sm:rounded-lg">
+          <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg font-medium leading-6 text-gray-900">Comments</h3>
+            
+            <!-- Comment Form -->
+            <form [formGroup]="commentForm" (ngSubmit)="onSubmitComment()" class="mt-5">
+              <div>
+                <label for="message" class="sr-only">Add a comment</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows="3"
+                  formControlName="message"
+                  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
+                  placeholder="Add a comment..."
+                ></textarea>
+                @if (message?.invalid && (message?.dirty || message?.touched)) {
+                  <div class="mt-2 text-sm text-red-600">
+                    @if (message?.errors?.['required']) {
+                      <p>Comment is required</p>
+                    }
+                    @if (message?.errors?.['minlength']) {
+                      <p>Comment must be at least 3 characters</p>
+                    }
+                  </div>
+                }
+              </div>
+              <div class="mt-3 flex justify-end">
+                <button
+                  type="submit"
+                  [disabled]="commentForm.invalid"
+                  class="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+                >
+                  Add Comment
+                </button>
+              </div>
+            </form>
+
+            <!-- Comments List -->
+            <div class="mt-6 flow-root">
+              <ul role="list" class="-mb-8">
+                @for (comment of claim.comments; track comment.createdAt) {
+                  <li>
+                    <div class="relative pb-8">
+                      <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true"></span>
+                      <div class="relative flex space-x-3">
+                        <div>
+                          <span class="h-8 w-8 rounded-full bg-gray-400 flex items-center justify-center ring-8 ring-white">
+                            <span class="text-sm font-medium text-white">{{ comment.name[0].toUpperCase() }}</span>
+                          </span>
+                        </div>
+                        <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                          <div>
+                            <p class="text-sm text-gray-500">{{ comment.message }}</p>
+                          </div>
+                          <div class="text-right text-sm whitespace-nowrap text-gray-500">
+                            <time [dateTime]="comment.createdAt">{{ comment.createdAt | date:'medium' }}</time>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                }
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Status and Timeline -->
+      <div class="space-y-6">
+        <!-- Status Card -->
+        <div class="bg-white shadow sm:rounded-lg">
+          <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg font-medium leading-6 text-gray-900">Status</h3>
+            <div class="mt-5">
+              @if (isManager) {
+                <select
+                  [value]="claim.status"
+                  (change)="updateClaimStatus($any($event.target).value)"
+                  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                >
+                  @for (status of claimStatuses; track status) {
+                    <option [value]="status">{{ status | titlecase }}</option>
+                  }
+                </select>
+              } @else {
+                <span [class]="'inline-flex rounded-full px-2 text-xs font-semibold leading-5 ' + getStatusClass(claim.status)">
+                  {{ claim.status | titlecase }}
+                </span>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Timeline Card -->
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Timeline</h3>
+          <div class="space-y-4">
+            <div class="flex items-start">
+              <div class="flex-shrink-0">
+                <div class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
+                  <svg class="h-5 w-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+              </div>
+              <div class="ml-4">
+                <p class="text-sm font-medium text-gray-900">Claim Created</p>
+                <p class="text-sm text-gray-500">{{ claim.createdAt | date:'medium' }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Activity Logs Card -->
+        <div class="bg-white rounded-lg shadow p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Activity Logs</h3>
+          <div class="space-y-4">
+            @if (logs.length === 0) {
+              <p class="text-gray-500 text-sm">No activity logs found</p>
+            } @else {
+              @for (log of logs; track log._id) {
+                <div class="flex items-start">
+                  <div class="flex-shrink-0">
+                    <div class="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center">
+                      <svg class="h-5 w-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-900">{{ log.action }}</p>
+                    <p class="text-xs text-gray-400 mt-1">
+                      {{ log.date | date:'medium' }}
+                    </p>
+                  </div>
+                </div>
+              }
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

@@ -1,59 +1,122 @@
-# ClaimConfidenceFrontend
+# Claims Confidence Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.12.
+A modern web application for managing insurance claims, built with Angular 17 and Tailwind CSS.
 
-## Development server
+## Features
 
-To start a local development server, run:
+- 🔐 **Authentication & Authorization**
+  - User login and registration
+  - Role-based access control (Claimant, Manager)
+  - Secure session management
 
+- 📝 **Claims Management**
+  - Create new claims with detailed information
+  - View and manage existing claims
+  - Track claim status (Pending, Submitted, Review, Approved, Rejected)
+  - Add comments and track activity logs
+
+- 👥 **User Roles**
+  - **Claimants**: Can create and view their own claims
+  - **Managers**: Can review, approve, or reject claims
+  - **Providers**: Can view and manage their associated claims
+
+## Prerequisites
+
+- Node.js (v20 or higher)
+- npm (v10 or higher)
+- Angular CLI (v19 or higher)
+
+## Installation
+
+1. Clone the repository:
+```bash
+git clone [repository-url]
+cd claim-confidence-frontend
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Create environment files:
+```bash
+cp src/environments/environment.example.ts src/environments/environment.ts
+cp src/environments/environment.example.ts src/environments/environment.development.ts
+```
+
+4. Update the environment files with your configuration:
+```typescript
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:3000/api'
+};
+```
+
+## Development
+
+Run the development server:
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+The application will be available at `http://localhost:4200`.
 
-## Code scaffolding
+## Building for Production
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
+Generate a production build:
 ```bash
-ng generate component component-name
+ng build --configuration production
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+The build artifacts will be stored in the `dist/` directory.
 
-```bash
-ng generate --help
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── core/                 # Core module (services, guards, interceptors)
+│   ├── features/            # Feature modules
+│   │   ├── auth/           # Authentication module
+│   │   ├── claims/         # Claims management module
+│   │   └── providers/      # Providers management module
+│   ├── shared/             # Shared components and utilities
+│   └── app.component.ts    # Root component
+├── assets/                 # Static assets
+└── environments/           # Environment configurations
 ```
 
-## Building
+## Key Components
 
-To build the project run:
+- **Claims Module**
+  - `ClaimsListComponent`: Displays all claims with filtering and sorting
+  - `ClaimFormComponent`: Form for creating and editing claims
+  - `ClaimDetailComponent`: Detailed view of a single claim
 
-```bash
-ng build
-```
+- **Auth Module**
+  - `LoginComponent`: User authentication
+  - `AuthGuard`: Route protection based on user roles
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## API Integration
 
-## Running unit tests
+The application integrates with the Claims Confidence Backend API. Key endpoints include:
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+- `/api/auth`: Authentication endpoints
+- `/api/claims`: Claims management
+- `/api/providers`: Provider information
+- `/api/logs`: Activity logging
 
+## Styling
+
+The application uses:
+- Tailwind CSS for styling
+- Custom components with responsive design
+- Consistent color scheme and typography
+
+## Testing
+
+Run unit tests:
 ```bash
 ng test
 ```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.

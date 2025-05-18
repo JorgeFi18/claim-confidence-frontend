@@ -1,0 +1,209 @@
+<div class="p-6">
+  <div class="mb-6 flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-gray-800">{{ isEditMode ? 'Edit Claim' : 'New Claim' }}</h1>
+    <button 
+      routerLink="/claims"
+      class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+    >
+      Back to List
+    </button>
+  </div>
+
+  @if (isLoading) {
+    <div class="flex justify-center items-center h-64">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+    </div>
+  } @else if (error) {
+    <div class="p-4 bg-red-100 text-red-700 rounded-md">
+      {{ error }}
+    </div>
+  } @else {
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+      <form [formGroup]="claimForm" (ngSubmit)="onSubmit()" class="p-6 space-y-6">
+        <div class="grid grid-cols-1 gap-6">
+          <div>
+            <label for="benefit" class="block text-sm font-medium text-gray-700">Benefit</label>
+            <select 
+              id="benefit" 
+              formControlName="benefit" 
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              [ngClass]="{'border-red-500': benefit?.invalid && (benefit?.dirty || benefit?.touched)}"
+            >
+              <option value="">Select a benefit</option>
+              @for (option of benefitOptions; track option) {
+                <option [value]="option">{{ option }}</option>
+              }
+            </select>
+            @if (benefit?.invalid && (benefit?.dirty || benefit?.touched)) {
+              <div class="mt-1 text-sm text-red-600">
+                @if (benefit?.errors?.['required']) {
+                  <p>Benefit is required</p>
+                }
+              </div>
+            }
+          </div>
+
+          <div>
+            <label for="fullName" class="block text-sm font-medium text-gray-700">Full Name</label>
+            <input 
+              type="text" 
+              id="fullName" 
+              formControlName="fullName" 
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              [ngClass]="{'border-red-500': fullName?.invalid && (fullName?.dirty || fullName?.touched)}"
+            >
+            @if (fullName?.invalid && (fullName?.dirty || fullName?.touched)) {
+              <div class="mt-1 text-sm text-red-600">
+                @if (fullName?.errors?.['required']) {
+                  <p>Full name is required</p>
+                }
+              </div>
+            }
+          </div>
+
+          <div class="grid grid-cols-2 gap-6">
+            <div>
+              <label for="birthDate" class="block text-sm font-medium text-gray-700">Birth Date</label>
+              <input 
+                type="date" 
+                id="birthDate" 
+                formControlName="birthDate" 
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                [ngClass]="{'border-red-500': birthDate?.invalid && (birthDate?.dirty || birthDate?.touched)}"
+              >
+              @if (birthDate?.invalid && (birthDate?.dirty || birthDate?.touched)) {
+                <div class="mt-1 text-sm text-red-600">
+                  @if (birthDate?.errors?.['required']) {
+                    <p>Birth date is required</p>
+                  }
+                </div>
+              }
+            </div>
+
+            <div>
+              <label for="gender" class="block text-sm font-medium text-gray-700">Gender</label>
+              <select 
+                id="gender" 
+                formControlName="gender"
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                [ngClass]="{'border-red-500': gender?.invalid && (gender?.dirty || gender?.touched)}"
+              >
+                @for (option of genderOptions; track option.value) {
+                  <option [value]="option.value">{{ option.label }}</option>
+                }
+              </select>
+              @if (gender?.invalid && (gender?.dirty || gender?.touched)) {
+                <div class="mt-1 text-sm text-red-600">
+                  @if (gender?.errors?.['required']) {
+                    <p>Gender is required</p>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-6">
+            <div>
+              <label for="phoneNumber" class="block text-sm font-medium text-gray-700">Phone Number</label>
+              <input 
+                type="tel" 
+                id="phoneNumber" 
+                formControlName="phoneNumber" 
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                [ngClass]="{'border-red-500': phoneNumber?.invalid && (phoneNumber?.dirty || phoneNumber?.touched)}"
+              >
+              @if (phoneNumber?.invalid && (phoneNumber?.dirty || phoneNumber?.touched)) {
+                <div class="mt-1 text-sm text-red-600">
+                  @if (phoneNumber?.errors?.['required']) {
+                    <p>Phone number is required</p>
+                  }
+                </div>
+              }
+            </div>
+
+            <div>
+              <label for="workPhoneNumber" class="block text-sm font-medium text-gray-700">Work Phone Number</label>
+              <input 
+                type="tel" 
+                id="workPhoneNumber" 
+                formControlName="workPhoneNumber" 
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              >
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-6">
+            <div>
+              <label for="roleStartDate" class="block text-sm font-medium text-gray-700">Role Start Date</label>
+              <input 
+                type="date" 
+                id="roleStartDate" 
+                formControlName="roleStartDate" 
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                [ngClass]="{'border-red-500': roleStartDate?.invalid && (roleStartDate?.dirty || roleStartDate?.touched)}"
+              >
+              @if (roleStartDate?.invalid && (roleStartDate?.dirty || roleStartDate?.touched)) {
+                <div class="mt-1 text-sm text-red-600">
+                  @if (roleStartDate?.errors?.['required']) {
+                    <p>Role start date is required</p>
+                  }
+                </div>
+              }
+            </div>
+
+            <div>
+              <label for="providerId" class="block text-sm font-medium text-gray-700">Provider</label>
+              <select 
+                id="providerId" 
+                formControlName="providerId" 
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                [ngClass]="{'border-red-500': providerId?.invalid && (providerId?.dirty || providerId?.touched)}"
+              >
+                <option value="">Select a provider</option>
+                @for (provider of providers; track provider._id) {
+                  <option [value]="provider._id">{{ provider.name }}</option>
+                }
+              </select>
+              @if (providerId?.invalid && (providerId?.dirty || providerId?.touched)) {
+                <div class="mt-1 text-sm text-red-600">
+                  @if (providerId?.errors?.['required']) {
+                    <p>Provider is required</p>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+
+          <div class="flex items-center">
+            <input 
+              type="checkbox" 
+              id="dependants" 
+              formControlName="dependants"
+              class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            >
+            <label for="dependants" class="ml-2 block text-sm text-gray-900">
+              Has Dependants
+            </label>
+          </div>
+        </div>
+
+        <div class="flex justify-end space-x-4">
+          <button 
+            type="button"
+            routerLink="/claims"
+            class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+          >
+            Cancel
+          </button>
+          <button 
+            type="submit"
+            [disabled]="claimForm.invalid || isLoading"
+            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+          >
+            {{ isEditMode ? 'Update Claim' : 'Create Claim' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  }
+</div>

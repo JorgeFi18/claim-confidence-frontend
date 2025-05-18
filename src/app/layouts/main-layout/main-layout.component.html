@@ -1,0 +1,18 @@
+<div class="flex min-h-screen bg-gray-100">
+  <!-- Sidebar -->
+  <app-sidebar class="w-64 flex-shrink-0"></app-sidebar>
+
+  <!-- Main content -->
+  <div class="flex flex-col flex-grow">
+    <!-- Navbar -->
+    <app-navbar class="sticky top-0 z-10"></app-navbar>
+
+    <!-- Page content -->
+    <main class="flex-grow p-6">
+      <router-outlet></router-outlet>
+    </main>
+
+    <!-- Footer -->
+    <app-footer></app-footer>
+  </div>
+</div>

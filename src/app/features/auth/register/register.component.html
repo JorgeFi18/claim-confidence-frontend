@@ -1,0 +1,138 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8">
+    <div>
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        Create your account
+      </h2>
+      <p class="mt-2 text-center text-sm text-gray-600">
+        Or
+        <a routerLink="/auth/login" class="font-medium text-blue-600 hover:text-blue-500">
+          sign in to your account
+        </a>
+      </p>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="mt-8 space-y-6">
+      @if (error) {
+        <div class="rounded-md bg-red-50 p-4">
+          <div class="flex">
+            <div class="ml-3">
+              <h3 class="text-sm font-medium text-red-800">{{ error }}</h3>
+            </div>
+          </div>
+        </div>
+      }
+
+      <div class="rounded-md shadow-sm -space-y-px">
+        <div>
+          <label for="name" class="sr-only">Full name</label>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            formControlName="name"
+            required
+            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+            placeholder="Full name"
+            [ngClass]="{'border-red-500': name?.invalid && (name?.dirty || name?.touched)}"
+          >
+          @if (name?.invalid && (name?.dirty || name?.touched)) {
+            <div class="mt-1 text-sm text-red-600">
+              @if (name?.errors?.['required']) {
+                <p>Name is required</p>
+              }
+            </div>
+          }
+        </div>
+
+        <div>
+          <label for="email" class="sr-only">Email address</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            formControlName="email"
+            required
+            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+            placeholder="Email address"
+            [ngClass]="{'border-red-500': email?.invalid && (email?.dirty || email?.touched)}"
+          >
+          @if (email?.invalid && (email?.dirty || email?.touched)) {
+            <div class="mt-1 text-sm text-red-600">
+              @if (email?.errors?.['required']) {
+                <p>Email is required</p>
+              }
+              @if (email?.errors?.['email']) {
+                <p>Please enter a valid email address</p>
+              }
+            </div>
+          }
+        </div>
+
+        <div>
+          <label for="password" class="sr-only">Password</label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            formControlName="password"
+            required
+            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+            placeholder="Password"
+            [ngClass]="{'border-red-500': password?.invalid && (password?.dirty || password?.touched)}"
+          >
+          @if (password?.invalid && (password?.dirty || password?.touched)) {
+            <div class="mt-1 text-sm text-red-600">
+              @if (password?.errors?.['required']) {
+                <p>Password is required</p>
+              }
+              @if (password?.errors?.['minlength']) {
+                <p>Password must be at least 6 characters</p>
+              }
+            </div>
+          }
+        </div>
+
+        <div>
+          <label for="confirmPassword" class="sr-only">Confirm password</label>
+          <input
+            id="confirmPassword"
+            name="confirmPassword"
+            type="password"
+            formControlName="confirmPassword"
+            required
+            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+            placeholder="Confirm password"
+            [ngClass]="{'border-red-500': (confirmPassword?.invalid && (confirmPassword?.dirty || confirmPassword?.touched)) || passwordMismatch}"
+          >
+          @if (confirmPassword?.invalid && (confirmPassword?.dirty || confirmPassword?.touched)) {
+            <div class="mt-1 text-sm text-red-600">
+              @if (confirmPassword?.errors?.['required']) {
+                <p>Please confirm your password</p>
+              }
+            </div>
+          }
+          @if (passwordMismatch && confirmPassword?.dirty) {
+            <div class="mt-1 text-sm text-red-600">
+              <p>Passwords do not match</p>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div>
+        <button
+          type="submit"
+          [disabled]="registerForm.invalid || isLoading"
+          class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+        >
+          @if (isLoading) {
+            <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+          } @else {
+            Sign up
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
